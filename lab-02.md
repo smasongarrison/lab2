@@ -185,25 +185,155 @@ ggplot(data = plastic_waste,
 
 ### Exercise 3
 
-Remove this text, and add your answer for Exercise 3 here.
+What do the violin plots reveal that box plots do not? What features are
+apparent in the box plots but not in the violin plots?
+
+At least given these defaults, box plots provide more summary statistics
+(like (I think) the 25% and 75% quartiles) than the violin plots do.
+They also seem to convey the outliers more clearly. I believe violin
+plots are used when one wants to have a pretty presentation, but doesn’t
+really care about communicating information. :)
+
+``` r
+ggplot(data = plastic_waste, 
+       mapping = aes(x = continent, 
+                     y = plastic_waste_per_cap)) +
+  geom_boxplot()
+```
+
+    ## Warning: Removed 51 rows containing non-finite values (`stat_boxplot()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-box%20plot-1.png)<!-- -->
+
+``` r
+ggplot(data = plastic_waste, 
+       mapping = aes(x = continent, 
+                     y = plastic_waste_per_cap)) +
+  geom_violin()
+```
+
+    ## Warning: Removed 51 rows containing non-finite values (`stat_ydensity()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-box%20plot-2.png)<!-- -->
 
 ### Exercise 4
 
-Remove this text, and add your answer for Exercise 4 here.
+4.1. Visualize the relationship between plastic waste per capita and
+mismanaged plastic waste per capita using a scatterplot. Describe the
+relationship.
+
+In general, as the amount of plastic waste per capita increases, the
+amount of mismanaged plastic waste per capita increases as well. It
+seems to be a moderately strong relationship.
+
+4.2. Color the points in the scatterplot by continent. Does there seem
+to be any clear distinctions between continents with respect to how
+plastic waste per capita and mismanaged plastic waste per capita are
+associated?
+
+I was having trouble seeing this with the graphs overlayed, so I faceted
+by continent and then eliminated T+T from the graph. The relationship
+seems particularly strong in Africa, Oceania, and (to a somewhat lesser
+extent) Asia. Interestingly, there doesn’t seem to be any relationship
+in Europe and at most a small relationship in North America. I expect
+the lack of relationship in Europe is because most of the countries are
+developed there.
+
+4.3. Visualize the relationship between plastic waste per capita and
+total population as well as plastic waste per capita and coastal
+population. You will need to make two separate plots. Do either of these
+pairs of variables appear to be more strongly linearly associated?
 
 ``` r
-# insert code here
+ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap)) +
+  geom_point() +
+  labs(title = "Plastic waste per capita vs. Mismanaged plastic waste per capita",
+       x = "Plastic waste", y = "Mismanaged plastic waste")
 ```
+
+    ## Warning: Removed 51 rows containing missing values (`geom_point()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-1.png)<!-- -->
+
+``` r
+ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent)) +
+  geom_point() +
+  labs(title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
+       x = "Plastic waste", y = "Mismanaged plastic waste")
+```
+
+    ## Warning: Removed 51 rows containing missing values (`geom_point()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-2.png)<!-- -->
+
+``` r
+ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent)) +
+  geom_point() + 
+  facet_wrap(~ continent, ncol = 2) +
+  labs(title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
+       x = "Plastic waste", y = "Mismanaged plastic waste")
+```
+
+    ## Warning: Removed 51 rows containing missing values (`geom_point()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-3.png)<!-- -->
+
+``` r
+ggplot(data = plastic_waste %>%
+  filter(plastic_waste_per_cap < 3.5), mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent)) +
+  geom_point() + 
+  facet_wrap(~ continent, ncol = 2) +
+  labs(title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
+       x = "Plastic waste", y = "Mismanaged plastic waste")
+```
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-4.png)<!-- -->
+
+``` r
+ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = total_pop)) +
+  geom_point() +
+  labs(title = "Plastic waste per capita vs. Total Population",
+       x = "Plastic waste", y = "Total population")
+```
+
+    ## Warning: Removed 61 rows containing missing values (`geom_point()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-5.png)<!-- -->
+
+``` r
+ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = coastal_pop)) +
+  geom_point() +
+  labs(title = "Plastic waste per capita vs. Coastal population",
+       x = "Plastic waste", y = "Coastal population")
+```
+
+    ## Warning: Removed 51 rows containing missing values (`geom_point()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-6.png)<!-- -->
+
+``` r
+ggplot(data = plastic_waste %>%
+  filter(plastic_waste_per_cap < 3.5), mapping = aes(x = plastic_waste_per_cap, y = total_pop)) +
+  geom_point() +
+  labs(title = "Plastic waste per capita vs. Total Population",
+       x = "Plastic waste", y = "Total population")
+```
+
+    ## Warning: Removed 10 rows containing missing values (`geom_point()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-7.png)<!-- -->
+
+``` r
+ggplot(data = plastic_waste %>%
+  filter(plastic_waste_per_cap < 3.5), mapping = aes(x = plastic_waste_per_cap, y = coastal_pop)) +
+  geom_point() +
+  labs(title = "Plastic waste per capita vs. Coastal population",
+       x = "Plastic waste", y = "Coastal population")
+```
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-8.png)<!-- -->
 
 ### Exercise 5
-
-Remove this text, and add your answer for Exercise 5 here.
-
-``` r
-# insert code here
-```
-
-### Exercise 6
 
 Remove this text, and add your answer for Exercise 6 here.
 
@@ -211,7 +341,7 @@ Remove this text, and add your answer for Exercise 6 here.
 # insert code here
 ```
 
-### Exercise 7
+### Exercise 6
 
 Remove this text, and add your answer for Exercise 7 here.
 
@@ -223,7 +353,7 @@ Remove this text, and add your answer for Exercise 7 here.
 # insert code here
 ```
 
-### Exercise 8
+### Exercise 7
 
 Remove this text, and add your answer for Exercise 8 here.
 
