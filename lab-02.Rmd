@@ -1,7 +1,7 @@
 ---
 title: "Lab 02 - Plastic waste"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Eric Stone"
+date: "1.8.24"
 output: github_document
 ---
 
@@ -19,16 +19,69 @@ plastic_waste <- read.csv("data/plastic-waste.csv")
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
+This was interesting to play around with. You can see my various attempts at visualization below. It turned out to be most effective to take Trinidad and Tobago out. In general, Europe and North America seem to have the most waste. Africa has the least. I expect that this is mostly a function of how developed the nations are. 
 
 ```{r plastic-waste-continent}
-# insert code here
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.2)
+plastic_waste %>%
+  filter(plastic_waste_per_cap > 3.5)
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.2)+
+  facet_grid(~ continent)
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.8)+
+  facet_grid(~ continent)
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.1)+
+  facet_grid(~ continent)
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.1)+
+  facet_wrap(~ continent, ncol = 2)
+ggplot(data = plastic_waste %>%
+  filter(plastic_waste_per_cap < 3.5), aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.1)+
+  facet_wrap(~ continent, ncol = 1) 
+ggplot(data = plastic_waste %>%
+  filter(plastic_waste_per_cap < 3.5), aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.1)+
+  facet_wrap(~ continent, ncol = 2) 
 ```
 
 ### Exercise 2
 
+Describe why we defined the color and fill of the curves by mapping aesthetics of the plot but we defined the alpha level as a characteristic of the plotting geom. 
+
+I believe this is a mapping vs. setting issue. "color" and "fill" were based on the continent variable, but alpha was chosen by us, not based on any particular variable. Note this isn't a function of, for example, color vs. alpha, but instead with what we were using these for in this particular case.
+
 ```{r plastic-waste-density}
-# insert code here
+ggplot(data = plastic_waste,
+       aes(x = plastic_waste_per_cap)) +
+  geom_density()
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent)) +
+  geom_density()
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density()
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density(alpha = 0.7)
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density(alpha = 0.2)
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density(alpha = 0.05)
 ```
 
 ### Exercise 3
