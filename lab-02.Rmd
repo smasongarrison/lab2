@@ -158,30 +158,16 @@ ggplot(data = plastic_waste %>%
 
 ### Exercise 5
 
-Remove this text, and add your answer for Exercise 6 here.
+Note I had trouble specifying the dataset for the analysis. I saw the "attach" command on-line. Is there a better way to do this?
 
 ```{r plastic-waste-mismanaged-continent}
-# insert code here
-```
-
-### Exercise 6
-
-Remove this text, and add your answer for Exercise 7 here.
-
-```{r plastic-waste-population-total}
-# insert code here
-```
-
-```{r plastic-waste-population-coastal}
-# insert code here
-```
-
-### Exercise 7
-
-Remove this text, and add your answer for Exercise 8 here.
-
-```{r recreate-viz}
-# insert code here
+attach(plastic_waste)
+perc_coastal <- coastal_pop / total_pop 
+ggplot(data = plastic_waste %>%
+  filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap)) +
+  geom_point() +
+  labs(title = "Coastal population percentage vs. Plastic waste per capita",
+       x = "Coastal population percentage", y = "Plastic waste")
 ```
 
 

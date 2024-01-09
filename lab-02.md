@@ -244,6 +244,11 @@ total population as well as plastic waste per capita and coastal
 population. You will need to make two separate plots. Do either of these
 pairs of variables appear to be more strongly linearly associated?
 
+There seems to be a small to moderate negative relationship in both
+cases. Maybe it’s slightly greater with coastal population, but it
+doesn’t seem that different to me. Note to visualize what was going on,
+I again took T+T out.
+
 ``` r
 ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap)) +
   geom_point() +
@@ -335,28 +340,17 @@ ggplot(data = plastic_waste %>%
 
 ### Exercise 5
 
-Remove this text, and add your answer for Exercise 6 here.
+Note I had trouble specifying the dataset for the analysis. I saw the
+“attach” command on-line. Is there a better way to do this?
 
 ``` r
-# insert code here
+attach(plastic_waste)
+perc_coastal <- coastal_pop / total_pop 
+ggplot(data = plastic_waste %>%
+  filter(plastic_waste_per_cap < 3.5), mapping = aes(x = coastal_pop, y = plastic_waste_per_cap)) +
+  geom_point() +
+  labs(title = "Coastal population percentage vs. Plastic waste per capita",
+       x = "Coastal population percentage", y = "Plastic waste")
 ```
 
-### Exercise 6
-
-Remove this text, and add your answer for Exercise 7 here.
-
-``` r
-# insert code here
-```
-
-``` r
-# insert code here
-```
-
-### Exercise 7
-
-Remove this text, and add your answer for Exercise 8 here.
-
-``` r
-# insert code here
-```
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-continent-1.png)<!-- -->
