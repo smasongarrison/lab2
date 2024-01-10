@@ -340,17 +340,58 @@ ggplot(data = plastic_waste %>%
 
 ### Exercise 5
 
-Note I had trouble specifying the dataset for the analysis. I saw the
-“attach” command on-line. Is there a better way to do this?
+Recreate the following plot, and interpret what you see in context of
+the data.
+
+I did have to get some help from chatgpt on this one. The main issue was
+figuring out that I needed to have color = continent with geom_point,
+not with aes. At any rate, it looks like there is a mildly increasing
+relationship between percentage coastal and plastic waste per capita
+until you reach percentage coastal of about .7, at which point the
+relationship goes away. However, given the fewer data points greater
+than 70%, i’m not sure that is meaningful.
+
+Thinking about this more, I’m not understanding something. Doesn’t the
+x-axis indicate that in some cases, coastal population is greater than
+total population??? What am I missing?
 
 ``` r
-attach(plastic_waste)
-perc_coastal <- coastal_pop / total_pop 
-ggplot(data = plastic_waste %>%
-  filter(plastic_waste_per_cap < 3.5), mapping = aes(x = coastal_pop, y = plastic_waste_per_cap)) +
-  geom_point() +
-  labs(title = "Coastal population percentage vs. Plastic waste per capita",
-       x = "Coastal population percentage", y = "Plastic waste")
+plastic_waste$perc_coastal <- plastic_waste$coastal_pop / plastic_waste$total_pop
+ggplot((data = plastic_waste) %>%
+    filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap)) +
+    geom_point( ) +
+    labs(title = "Percentage coastal population vs. Plastic waste per capita",
+       x = "Percentage coastal", y = "Plastic waste")
 ```
 
+    ## Warning: Removed 10 rows containing missing values (`geom_point()`).
+
 ![](lab-02_files/figure-gfm/plastic-waste-mismanaged-continent-1.png)<!-- -->
+
+``` r
+ggplot((data = plastic_waste) %>%
+    filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap, color = continent)) +
+    geom_point( ) +
+    labs(title = "Percentage coastal population vs. Plastic waste per capita",
+       x = "Percentage coastal", y = "Plastic waste")
+```
+
+    ## Warning: Removed 10 rows containing missing values (`geom_point()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-continent-2.png)<!-- -->
+
+``` r
+ggplot((data = plastic_waste) %>%
+    filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap)) +
+    geom_point(aes(color = continent)) +
+    geom_smooth( ) +
+    labs(title = "Percentage coastal population vs. Plastic waste per capita",
+       x = "Percentage coastal", y = "Plastic waste")
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+    ## Warning: Removed 10 rows containing non-finite values (`stat_smooth()`).
+    ## Removed 10 rows containing missing values (`geom_point()`).
+
+![](lab-02_files/figure-gfm/plastic-waste-mismanaged-continent-3.png)<!-- -->
