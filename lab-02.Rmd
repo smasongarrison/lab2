@@ -7,11 +7,11 @@ output: github_document
 
 ## Load packages and data
 
-```{r load-packages, message=FALSE}
+```{r load-packages, message=FALSE, warning=FALSE}
 library(tidyverse)
 ```
 
-```{r load-data, message=FALSE}
+```{r load-data, message=FALSE, warning=FALSE}
 plastic_waste <- read.csv("data/plastic-waste.csv")
 ```
 
@@ -20,16 +20,18 @@ plastic_waste <- read.csv("data/plastic-waste.csv")
 ### Exercise 1
 
 This was interesting to play around with. You can see my various attempts at visualization below. It turned out to be most effective to take Trinidad and Tobago out. In general, Europe and North America seem to have the most waste. Africa has the least. I expect that this is mostly a function of how developed the nations are. 
-
-```{r plastic-waste-continent}
+ :)
+ 
+```{r plastic-waste-continent, warning=FALSE}
 ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
   geom_histogram(binwidth = 0.2)
 
 plastic_waste %>%
-  filter(plastic_waste_per_cap > 3.5) 
-ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  filter(plastic_waste_per_cap > 3.5)  %>% #here's a pipe so that your data actually works
+ggplot(aes(x = plastic_waste_per_cap)) +
   geom_histogram(binwidth = 0.2) +
   facet_grid(~continent)
+
 ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
   geom_histogram(binwidth = 0.8) +
   facet_grid(~continent)
@@ -51,59 +53,59 @@ ggplot(data = plastic_waste %>%
 
 ### Exercise 2
 
-Describe why we defined the color and fill of the curves by mapping aesthetics of the plot but we defined the alpha level as a characteristic of the plotting geom. 
+> Describe why we defined the color and fill of the curves by mapping aesthetics of the plot but we defined the alpha level as a characteristic of the plotting geom. 
 
 I believe this is a mapping vs. setting issue. "color" and "fill" were based on the continent variable, but alpha was chosen by us, not based on any particular variable. Note this isn't a function of, for example, color vs. alpha, but instead with what we were using these for in this particular case.
+
+Yep :)
 
 ```{r plastic-waste-density}
 ggplot(
   data = plastic_waste,
-  aes(x = plastic_waste_per_cap)
-) +
+  aes(x = plastic_waste_per_cap)) +
   geom_density()
+
 ggplot(
   data = plastic_waste,
   mapping = aes(
     x = plastic_waste_per_cap,
-    color = continent
-  )
-) +
+    color = continent )) +
   geom_density()
-ggplot(
-  data = plastic_waste,
-  mapping = aes(
-    x = plastic_waste_per_cap,
-    color = continent,
-    fill = continent
-  )
-) +
-  geom_density()
+
 ggplot(
   data = plastic_waste,
   mapping = aes(
     x = plastic_waste_per_cap,
     color = continent,
     fill = continent
-  )
-) +
+  )) +
+  geom_density()
+
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = plastic_waste_per_cap,
+    color = continent,
+    fill = continent
+  )) +
   geom_density(alpha = 0.7)
+
 ggplot(
   data = plastic_waste,
   mapping = aes(
     x = plastic_waste_per_cap,
     color = continent,
     fill = continent
-  )
-) +
+  )) +
   geom_density(alpha = 0.2)
+
 ggplot(
   data = plastic_waste,
   mapping = aes(
     x = plastic_waste_per_cap,
     color = continent,
     fill = continent
-  )
-) +
+  )) +
   geom_density(alpha = 0.05)
 ```
 
@@ -113,23 +115,22 @@ What do the violin plots reveal that box plots do not? What features are apparen
 
 At least given these defaults, box plots provide more summary statistics (like (I think) the 25% and 75% quartiles) than the violin plots do. They also seem to convey the outliers more clearly. I believe violin plots are used when one wants to have a pretty presentation, but doesn't really care about communicating information. :) 
 
+# but why would you settle for the defaults ? has spss broken you?
+
 ```{r plastic-waste-box plot}
 ggplot(
   data = plastic_waste,
   mapping = aes(
     x = continent,
     y = plastic_waste_per_cap
-  )
-) +
-  geom_boxplot()
+  )) + geom_boxplot()
 ggplot(
   data = plastic_waste,
   mapping = aes(
     x = continent,
     y = plastic_waste_per_cap
-  )
-) +
-  geom_violin()
+  )) +
+  geom_violin(draw_quantiles = c(.25,.5,.75),scale = "count")
 ```
 
 
@@ -162,7 +163,8 @@ ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = misman
   geom_point() +
   facet_wrap(~continent, ncol = 2) +
   labs(
-    title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
+    title = "Plastic waste per capita vs. Mismanaged plastic waste per capita",
+    subtitle = "per continent",
     x = "Plastic waste", y = "Mismanaged plastic waste"
   )
 ggplot(data = plastic_waste %>%
@@ -217,6 +219,16 @@ I did have to get some help from chatgpt on this one. The main issue was figurin
 
 Thinking about this more, I'm not understanding something. Doesn't the x-axis indicate that in some cases, coastal population is greater than total population???  What am I missing?
 
+> good question, let's look at the data
+
+```{r}
+
+plastic_waste %>% select(entity,coastal_pop,total_pop) %>%
+  mutate(perc_coastal = coastal_pop / total_pop) %>%
+  filter(perc_coastal > 1) %>% print() %>% count()
+```
+
+Yep it looks like all tge island nations have this problem. My autocomplete says "I think it's because the total population is the population of the whole country, but the coastal population is only the population of the coastal areas. So if you have a country that is mostly islands, the coastal population will be greater than the total population." But that doesn't make sense to me. Autocorrect also said, "If the coastal population is only the population of the coastal areas, then how can it be greater than the total population? I'm confused." and "I'm confused too". My guess is that the data is wrong.
 
 ```{r plastic-waste-mismanaged-continent}
 plastic_waste$perc_coastal <- plastic_waste$coastal_pop / plastic_waste$total_pop
