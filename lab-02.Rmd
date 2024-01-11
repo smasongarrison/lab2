@@ -8,7 +8,7 @@ output: github_document
 ## Load packages and data
 
 ```{r load-packages, message=FALSE}
-library(tidyverse) 
+library(tidyverse)
 ```
 
 ```{r load-data, message=FALSE}
@@ -24,28 +24,29 @@ This was interesting to play around with. You can see my various attempts at vis
 ```{r plastic-waste-continent}
 ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
   geom_histogram(binwidth = 0.2)
+
 plastic_waste %>%
-  filter(plastic_waste_per_cap > 3.5)
+  filter(plastic_waste_per_cap > 3.5) 
 ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
-  geom_histogram(binwidth = 0.2)+
-  facet_grid(~ continent)
+  geom_histogram(binwidth = 0.2) +
+  facet_grid(~continent)
 ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
-  geom_histogram(binwidth = 0.8)+
-  facet_grid(~ continent)
+  geom_histogram(binwidth = 0.8) +
+  facet_grid(~continent)
 ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
-  geom_histogram(binwidth = 0.1)+
-  facet_grid(~ continent)
+  geom_histogram(binwidth = 0.1) +
+  facet_grid(~continent)
 ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
-  geom_histogram(binwidth = 0.1)+
-  facet_wrap(~ continent, ncol = 2)
+  geom_histogram(binwidth = 0.1) +
+  facet_wrap(~continent, ncol = 2)
 ggplot(data = plastic_waste %>%
   filter(plastic_waste_per_cap < 3.5), aes(x = plastic_waste_per_cap)) +
-  geom_histogram(binwidth = 0.1)+
-  facet_wrap(~ continent, ncol = 1) 
+  geom_histogram(binwidth = 0.1) +
+  facet_wrap(~continent, ncol = 1)
 ggplot(data = plastic_waste %>%
   filter(plastic_waste_per_cap < 3.5), aes(x = plastic_waste_per_cap)) +
-  geom_histogram(binwidth = 0.1)+
-  facet_wrap(~ continent, ncol = 2) 
+  geom_histogram(binwidth = 0.1) +
+  facet_wrap(~continent, ncol = 2)
 ```
 
 ### Exercise 2
@@ -55,32 +56,54 @@ Describe why we defined the color and fill of the curves by mapping aesthetics o
 I believe this is a mapping vs. setting issue. "color" and "fill" were based on the continent variable, but alpha was chosen by us, not based on any particular variable. Note this isn't a function of, for example, color vs. alpha, but instead with what we were using these for in this particular case.
 
 ```{r plastic-waste-density}
-ggplot(data = plastic_waste,
-       aes(x = plastic_waste_per_cap)) +
+ggplot(
+  data = plastic_waste,
+  aes(x = plastic_waste_per_cap)
+) +
   geom_density()
-ggplot(data = plastic_waste, 
-       mapping = aes(x = plastic_waste_per_cap, 
-                     color = continent)) +
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = plastic_waste_per_cap,
+    color = continent
+  )
+) +
   geom_density()
-ggplot(data = plastic_waste, 
-       mapping = aes(x = plastic_waste_per_cap, 
-                     color = continent, 
-                     fill = continent)) +
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = plastic_waste_per_cap,
+    color = continent,
+    fill = continent
+  )
+) +
   geom_density()
-ggplot(data = plastic_waste, 
-       mapping = aes(x = plastic_waste_per_cap, 
-                     color = continent, 
-                     fill = continent)) +
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = plastic_waste_per_cap,
+    color = continent,
+    fill = continent
+  )
+) +
   geom_density(alpha = 0.7)
-ggplot(data = plastic_waste, 
-       mapping = aes(x = plastic_waste_per_cap, 
-                     color = continent, 
-                     fill = continent)) +
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = plastic_waste_per_cap,
+    color = continent,
+    fill = continent
+  )
+) +
   geom_density(alpha = 0.2)
-ggplot(data = plastic_waste, 
-       mapping = aes(x = plastic_waste_per_cap, 
-                     color = continent, 
-                     fill = continent)) +
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = plastic_waste_per_cap,
+    color = continent,
+    fill = continent
+  )
+) +
   geom_density(alpha = 0.05)
 ```
 
@@ -91,13 +114,21 @@ What do the violin plots reveal that box plots do not? What features are apparen
 At least given these defaults, box plots provide more summary statistics (like (I think) the 25% and 75% quartiles) than the violin plots do. They also seem to convey the outliers more clearly. I believe violin plots are used when one wants to have a pretty presentation, but doesn't really care about communicating information. :) 
 
 ```{r plastic-waste-box plot}
-ggplot(data = plastic_waste, 
-       mapping = aes(x = continent, 
-                     y = plastic_waste_per_cap)) +
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = continent,
+    y = plastic_waste_per_cap
+  )
+) +
   geom_boxplot()
-ggplot(data = plastic_waste, 
-       mapping = aes(x = continent, 
-                     y = plastic_waste_per_cap)) +
+ggplot(
+  data = plastic_waste,
+  mapping = aes(
+    x = continent,
+    y = plastic_waste_per_cap
+  )
+) +
   geom_violin()
 ```
 
@@ -109,8 +140,10 @@ ggplot(data = plastic_waste,
 ```{r plastic-waste-mismanaged41}
 ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap)) +
   geom_point() +
-  labs(title = "Plastic waste per capita vs. Mismanaged plastic waste per capita",
-       x = "Plastic waste", y = "Mismanaged plastic waste")
+  labs(
+    title = "Plastic waste per capita vs. Mismanaged plastic waste per capita",
+    x = "Plastic waste", y = "Mismanaged plastic waste"
+  )
 ```
 
 In general, as the amount of plastic waste per capita increases, the amount of mismanaged plastic waste per capita increases as well. It seems to be a moderately strong relationship.
@@ -120,20 +153,26 @@ In general, as the amount of plastic waste per capita increases, the amount of m
 ```{r plastic-waste-mismanaged42}
 ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent)) +
   geom_point() +
-  labs(title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
-       x = "Plastic waste", y = "Mismanaged plastic waste")
+  labs(
+    title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
+    x = "Plastic waste", y = "Mismanaged plastic waste"
+  )
 
 ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent)) +
-  geom_point() + 
-  facet_wrap(~ continent, ncol = 2) +
-  labs(title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
-       x = "Plastic waste", y = "Mismanaged plastic waste")
+  geom_point() +
+  facet_wrap(~continent, ncol = 2) +
+  labs(
+    title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
+    x = "Plastic waste", y = "Mismanaged plastic waste"
+  )
 ggplot(data = plastic_waste %>%
   filter(plastic_waste_per_cap < 3.5), mapping = aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent)) +
-  geom_point() + 
-  facet_wrap(~ continent, ncol = 2) +
-  labs(title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
-       x = "Plastic waste", y = "Mismanaged plastic waste")
+  geom_point() +
+  facet_wrap(~continent, ncol = 2) +
+  labs(
+    title = "Plastic waste per capita vs. Mismanaged plastic waste per capita, per continent",
+    x = "Plastic waste", y = "Mismanaged plastic waste"
+  )
 ```
 I was having trouble seeing this with the graphs overlayed, so I faceted by continent and then eliminated T+T from the graph. The relationship seems particularly strong in Africa, Oceania, and (to a somewhat lesser extent) Asia. Interestingly, there doesn't seem to be any relationship in Europe and at most a small relationship in North America. I expect the lack of relationship in Europe is because most of the countries are developed there.
 
@@ -141,22 +180,30 @@ I was having trouble seeing this with the graphs overlayed, so I faceted by cont
 ```{r plastic-waste-mismanaged43}
 ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = total_pop)) +
   geom_point() +
-  labs(title = "Plastic waste per capita vs. Total Population",
-       x = "Plastic waste", y = "Total population")
+  labs(
+    title = "Plastic waste per capita vs. Total Population",
+    x = "Plastic waste", y = "Total population"
+  )
 ggplot(data = plastic_waste, mapping = aes(x = plastic_waste_per_cap, y = coastal_pop)) +
   geom_point() +
-  labs(title = "Plastic waste per capita vs. Coastal population",
-       x = "Plastic waste", y = "Coastal population")
+  labs(
+    title = "Plastic waste per capita vs. Coastal population",
+    x = "Plastic waste", y = "Coastal population"
+  )
 ggplot(data = plastic_waste %>%
   filter(plastic_waste_per_cap < 3.5), mapping = aes(x = plastic_waste_per_cap, y = total_pop)) +
   geom_point() +
-  labs(title = "Plastic waste per capita vs. Total Population",
-       x = "Plastic waste", y = "Total population")
+  labs(
+    title = "Plastic waste per capita vs. Total Population",
+    x = "Plastic waste", y = "Total population"
+  )
 ggplot(data = plastic_waste %>%
   filter(plastic_waste_per_cap < 3.5), mapping = aes(x = plastic_waste_per_cap, y = coastal_pop)) +
   geom_point() +
-  labs(title = "Plastic waste per capita vs. Coastal population",
-       x = "Plastic waste", y = "Coastal population")
+  labs(
+    title = "Plastic waste per capita vs. Coastal population",
+    x = "Plastic waste", y = "Coastal population"
+  )
 ```
 There seems to be a small to moderate negative relationship in both cases. Maybe it's slightly greater with coastal population, but it doesn't seem that different to me. Note to visualize what was going on, I again took T+T out. 
 
@@ -173,22 +220,26 @@ Thinking about this more, I'm not understanding something. Doesn't the x-axis in
 
 ```{r plastic-waste-mismanaged-continent}
 plastic_waste$perc_coastal <- plastic_waste$coastal_pop / plastic_waste$total_pop
-ggplot((data = plastic_waste) %>%
-    filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap)) +
-    geom_point( ) +
-    labs(title = "Percentage coastal population vs. Plastic waste per capita",
-       x = "Percentage coastal", y = "Plastic waste")
-ggplot((data = plastic_waste) %>%
-    filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap, color = continent)) +
-    geom_point( ) +
-    labs(title = "Percentage coastal population vs. Plastic waste per capita",
-       x = "Percentage coastal", y = "Plastic waste")
-ggplot((data = plastic_waste) %>%
-    filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap)) +
-    geom_point(aes(color = continent)) +
-    geom_smooth( ) +
-    labs(title = "Percentage coastal population vs. Plastic waste per capita",
-       x = "Percentage coastal", y = "Plastic waste")
+ggplot((data <- plastic_waste) %>%
+  filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap)) +
+  geom_point() +
+  labs(
+    title = "Percentage coastal population vs. Plastic waste per capita",
+    x = "Percentage coastal", y = "Plastic waste"
+  )
+ggplot((data <- plastic_waste) %>%
+  filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap, color = continent)) +
+  geom_point() +
+  labs(
+    title = "Percentage coastal population vs. Plastic waste per capita",
+    x = "Percentage coastal", y = "Plastic waste"
+  )
+ggplot((data <- plastic_waste) %>%
+  filter(plastic_waste_per_cap < 3.5), mapping = aes(x = perc_coastal, y = plastic_waste_per_cap)) +
+  geom_point(aes(color = continent)) +
+  geom_smooth() +
+  labs(
+    title = "Percentage coastal population vs. Plastic waste per capita",
+    x = "Percentage coastal", y = "Plastic waste"
+  )
 ```
-
-
